@@ -17,6 +17,17 @@ jobs:
         with:
           release: R2026a
 
+      # Restore the build tool's incremental-build state so up-to-date tasks
+      # (currently "test") are skipped. The key changes every commit so a fresh
+      # cache is saved; restore-keys pulls in the most recent prior one.
+      - name: Cache build tool state
+        uses: actions/cache@v4
+        with:
+          path: .buildtool
+          key: buildtool-${{ runner.os }}-R2026a-${{ github.sha }}
+          restore-keys: |
+            buildtool-${{ runner.os }}-R2026a-
+
       - name: Run MATLAB build
         uses: matlab-actions/run-build@v3
         with:
